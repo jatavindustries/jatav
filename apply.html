@@ -7,7 +7,7 @@
 <style>
 body{
 margin:0;
-font-family:Arial;
+font-family:Arial,sans-serif;
 background:#f5f9ff;
 }
 
@@ -48,6 +48,10 @@ cursor:pointer;
 font-size:16px;
 }
 
+button:hover{
+opacity:0.9;
+}
+
 a{
 color:#0056d2;
 text-decoration:none;
@@ -75,15 +79,15 @@ margin-top:30px;
 
 <h2>Apply For Loan</h2>
 
-<input type="text" placeholder="Full Name">
+<input type="text" id="full_name" placeholder="Full Name">
 
-<input type="text" placeholder="Mobile Number">
+<input type="text" id="mobile" placeholder="Mobile Number">
 
-<input type="email" placeholder="Email Address">
+<input type="email" id="email" placeholder="Email Address">
 
-<input type="text" placeholder="City">
+<input type="text" id="city" placeholder="City">
 
-<select>
+<select id="loan_type">
 <option>Select Loan Type</option>
 <option>Personal Loan</option>
 <option>Business Loan</option>
@@ -91,9 +95,11 @@ margin-top:30px;
 <option>Education Loan</option>
 </select>
 
-<input type="text" placeholder="Required Loan Amount">
+<input type="text" id="loan_amount" placeholder="Required Loan Amount">
 
-<button>Submit Application</button>
+<button type="button">
+Submit Application
+</button>
 
 <br><br>
 
