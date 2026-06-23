@@ -4,6 +4,8 @@
 <head>
 <title>Apply Loan - JATAV</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 body{
 margin:0;
@@ -46,10 +48,6 @@ border:none;
 border-radius:5px;
 cursor:pointer;
 font-size:16px;
-}
-
-button:hover{
-opacity:0.9;
 }
 
 a{
@@ -97,7 +95,7 @@ margin-top:30px;
 
 <input type="text" id="loan_amount" placeholder="Required Loan Amount">
 
-<button type="button">
+<button type="button" onclick="submitLoan()">
 Submit Application
 </button>
 
@@ -110,6 +108,41 @@ Submit Application
 <footer>
 © 2026 JATAV
 </footer>
+
+<script>
+
+const supabaseUrl = "https://dqigwxlroejnmhmhxzdm.supabase.co/rest/v1/";
+
+const supabaseKey = "sb_publishable_O72-5olasZIGsRiKHqEmdg_SJfUcY7x";
+
+const supabaseClient = supabase.createClient(
+supabaseUrl,
+supabaseKey
+);
+
+async function submitLoan(){
+
+const { error } = await supabaseClient
+.from("loan_applications")
+.insert([{
+full_name: document.getElementById("full_name").value,
+mobile: document.getElementById("mobile").value,
+email: document.getElementById("email").value,
+city: document.getElementById("city").value,
+loan_type: document.getElementById("loan_type").value,
+loan_amount: document.getElementById("loan_amount").value
+}]);
+
+if(error){
+alert("Error: " + error.message);
+}
+else{
+alert("Application Submitted Successfully!");
+}
+
+}
+
+</script>
 
 </body>
 </html>
