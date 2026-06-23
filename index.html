@@ -16,32 +16,36 @@ background:#f5f9ff;
 header{
 background:#0056d2;
 color:white;
-padding:20px;
 text-align:center;
+padding:20px;
 position:relative;
 }
 
-.login-btn{
+.top-buttons{
 position:absolute;
 right:20px;
 top:20px;
+}
+
+.top-buttons a{
 background:white;
 color:#0056d2;
-padding:10px 15px;
+padding:8px 12px;
+margin-left:5px;
 text-decoration:none;
 border-radius:5px;
 font-weight:bold;
 }
 
 .hero{
-text-align:center;
-padding:70px 20px;
 background:white;
+text-align:center;
+padding:60px 20px;
 }
 
 .hero h2{
 color:#0056d2;
-font-size:42px;
+font-size:40px;
 }
 
 .btn{
@@ -74,10 +78,26 @@ border-radius:10px;
 box-shadow:0 2px 10px rgba(0,0,0,0.1);
 }
 
-.contact{
-padding:40px;
-text-align:center;
+.form-section{
 background:white;
+margin:20px;
+padding:30px;
+border-radius:10px;
+text-align:center;
+}
+
+.form-section input{
+width:80%;
+padding:10px;
+margin:8px;
+}
+
+.form-section button{
+background:#0056d2;
+color:white;
+padding:10px 20px;
+border:none;
+border-radius:5px;
 }
 
 footer{
@@ -85,6 +105,7 @@ background:#0056d2;
 color:white;
 text-align:center;
 padding:15px;
+margin-top:20px;
 }
 
 .whatsapp{
@@ -93,9 +114,9 @@ right:20px;
 bottom:20px;
 background:#25D366;
 color:white;
-padding:15px 20px;
-text-decoration:none;
+padding:15px;
 border-radius:50px;
+text-decoration:none;
 font-weight:bold;
 }
 </style>
@@ -105,15 +126,19 @@ font-weight:bold;
 <body>
 
 <header>
-<a href="#" class="login-btn">Customer Login</a>
+<div class="top-buttons">
+<a href="#login">Login</a>
+<a href="#register">Register</a>
+</div>
+
 <h1>JATAV</h1>
 <p>Finance & Business Services</p>
 </header>
 
 <section class="hero">
 <h2>Get The Right Financial Solution</h2>
-<p>Personal Loan, Business Loan, Credit Card & Insurance Services</p>
-<a href="#" class="btn">Apply Now</a>
+<p>Personal Loan, Business Loan, Credit Card & Insurance</p>
+<a href="#register" class="btn">Apply Now</a>
 </section>
 
 <section class="services">
@@ -133,21 +158,38 @@ font-weight:bold;
 
 <div class="card">
 <h3>Credit Card</h3>
-<p>Find the right credit card for your needs.</p>
+<p>Find the right credit card.</p>
 </div>
 
 <div class="card">
 <h3>Insurance</h3>
-<p>Secure your future with insurance plans.</p>
+<p>Secure your future.</p>
 </div>
 
 </div>
 </section>
 
-<section class="contact">
+<section id="register" class="form-section">
+<h2>Customer Registration</h2>
 
-  
-<p>Email: supportjatav@gmail.com</p>
+<input type="text" placeholder="Full Name"><br> <input type="text" placeholder="Mobile Number"><br> <input type="email" placeholder="Email"><br> <input type="text" placeholder="City"><br> <input type="password" placeholder="Password"><br>
+
+<button>Register</button>
+
+</section>
+
+<section id="login" class="form-section">
+<h2>Customer Login</h2>
+
+<input type="email" placeholder="Email"><br> <input type="password" placeholder="Password"><br>
+
+<button>Login</button>
+
+</section>
+
+<section class="form-section">
+<h2>Contact Us</h2>
+<p>Email: support@jatav.in</p>
 <p>Phone: +91 9301798361</p>
 
 <h3>Follow Us</h3>
