@@ -1,15 +1,20 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JATAV</title>
+<title>JATAV - Finance & Business Services</title>
 
 <style>
-body{
+
+*{
 margin:0;
+padding:0;
+box-sizing:border-box;
 font-family:Arial,sans-serif;
+}
+
+body{
 background:#f5f9ff;
 }
 
@@ -30,8 +35,8 @@ top:20px;
 .top-buttons a{
 background:white;
 color:#0056d2;
-padding:8px 12px;
-margin-left:5px;
+padding:8px 14px;
+margin-left:8px;
 text-decoration:none;
 border-radius:5px;
 font-weight:bold;
@@ -39,13 +44,19 @@ font-weight:bold;
 
 .hero{
 background:white;
-padding:60px 20px;
+padding:80px 20px;
 text-align:center;
 }
 
 .hero h2{
-font-size:40px;
+font-size:45px;
 color:#0056d2;
+margin-bottom:15px;
+}
+
+.hero p{
+font-size:18px;
+margin-bottom:25px;
 }
 
 .btn{
@@ -55,11 +66,10 @@ padding:12px 25px;
 text-decoration:none;
 border-radius:5px;
 display:inline-block;
-margin-top:15px;
 }
 
 .services{
-padding:50px 20px;
+padding:60px 20px;
 text-align:center;
 }
 
@@ -68,21 +78,83 @@ display:flex;
 flex-wrap:wrap;
 justify-content:center;
 gap:20px;
+margin-top:20px;
 }
 
 .card{
 background:white;
-width:250px;
+width:260px;
 padding:20px;
 border-radius:10px;
 box-shadow:0 2px 10px rgba(0,0,0,0.1);
 }
 
-.contact{
+.features{
 background:white;
-padding:40px;
+padding:60px 20px;
 text-align:center;
+}
+
+.feature-box{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:20px;
 margin-top:20px;
+}
+
+.feature{
+background:#f5f9ff;
+padding:20px;
+width:260px;
+border-radius:10px;
+}
+
+.reviews{
+padding:60px 20px;
+text-align:center;
+}
+
+.review-box{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:20px;
+margin-top:20px;
+}
+
+.review{
+background:white;
+width:260px;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+
+.calculator{
+background:white;
+padding:60px 20px;
+text-align:center;
+}
+
+.calculator input{
+padding:12px;
+margin:8px;
+width:250px;
+}
+
+.calculator button{
+padding:12px 20px;
+background:#0056d2;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+
+.contact{
+padding:60px 20px;
+text-align:center;
 }
 
 footer{
@@ -103,8 +175,8 @@ border-radius:50px;
 text-decoration:none;
 font-weight:bold;
 }
-</style>
 
+</style>
 </head>
 
 <body>
@@ -122,8 +194,12 @@ font-weight:bold;
 </header>
 
 <section class="hero">
+
 <h2>Get The Right Financial Solution</h2>
-<p>Personal Loan, Business Loan, Credit Card & Insurance</p>
+
+<p>
+Personal Loan, Business Loan, Credit Card & Insurance Services
+</p>
 
 <a href="apply.html" class="btn">
 Apply Now
@@ -139,25 +215,96 @@ Apply Now
 
 <div class="card">
 <h3>Personal Loan</h3>
-<p>Quick personal loan solutions.</p>
+<p>Quick and easy personal loan solutions.</p>
 </div>
 
 <div class="card">
 <h3>Business Loan</h3>
-<p>Grow your business with funding.</p>
+<p>Business funding and growth support.</p>
 </div>
 
 <div class="card">
 <h3>Credit Card</h3>
-<p>Find the right credit card.</p>
+<p>Best credit card options for customers.</p>
 </div>
 
 <div class="card">
 <h3>Insurance</h3>
-<p>Secure your future.</p>
+<p>Secure your future with insurance plans.</p>
 </div>
 
 </div>
+
+</section>
+
+<section class="features">
+
+<h2>Why Choose JATAV?</h2>
+
+<div class="feature-box">
+
+<div class="feature">
+<h3>Fast Approval</h3>
+<p>Quick loan processing and approval.</p>
+</div>
+
+<div class="feature">
+<h3>Secure Process</h3>
+<p>Your information remains protected.</p>
+</div>
+
+<div class="feature">
+<h3>Trusted Service</h3>
+<p>Reliable finance and business support.</p>
+</div>
+
+</div>
+
+</section>
+
+<section class="reviews">
+
+<h2>Customer Reviews</h2>
+
+<div class="review-box">
+
+<div class="review">
+⭐⭐⭐⭐⭐
+<p>Very smooth loan process.</p>
+<b>Rahul</b>
+</div>
+
+<div class="review">
+⭐⭐⭐⭐⭐
+<p>Fast response and support.</p>
+<b>Priya</b>
+</div>
+
+<div class="review">
+⭐⭐⭐⭐⭐
+<p>Easy application experience.</p>
+<b>Amit</b>
+</div>
+
+</div>
+
+</section>
+
+<section class="calculator">
+
+<h2>Loan EMI Calculator</h2>
+
+<input type="number" id="amount" placeholder="Loan Amount"><br>
+
+<input type="number" id="rate" placeholder="Interest Rate (%)"><br>
+
+<input type="number" id="months" placeholder="Months"><br><br>
+
+<button onclick="calcEMI()">
+Calculate EMI
+</button>
+
+<h3 id="emiResult"></h3>
 
 </section>
 
@@ -165,11 +312,17 @@ Apply Now
 
 <h2>Contact Us</h2>
 
-<p>Email: supportjatav@gmail.com</p>
+<p>Email: support@jatav.in</p>
+<br>
 <p>Phone: +91 9301798361</p>
 
+<br>
+
 <h3>Follow Us</h3>
-<p>Instagram | Facebook | LinkedIn | YouTube</p>
+
+<p>
+Instagram | Facebook | LinkedIn | YouTube
+</p>
 
 </section>
 
@@ -180,6 +333,25 @@ Apply Now
 <a href="https://wa.me/919301798361" class="whatsapp">
 WhatsApp
 </a>
+
+<script>
+
+function calcEMI(){
+
+let p=parseFloat(document.getElementById("amount").value);
+
+let r=parseFloat(document.getElementById("rate").value)/12/100;
+
+let n=parseFloat(document.getElementById("months").value);
+
+let emi=(p*r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1);
+
+document.getElementById("emiResult").innerHTML =
+"Estimated EMI: ₹ " + emi.toFixed(2);
+
+}
+
+</script>
 
 </body>
 </html>
