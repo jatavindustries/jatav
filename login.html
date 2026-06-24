@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-
 <html>
 <head>
-<title>JATAV Login</title>
+<title>JATAV Admin Login</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+
 body{
 margin:0;
-font-family:Arial;
+font-family:Arial,sans-serif;
 background:#f5f9ff;
 }
 
@@ -21,6 +23,7 @@ padding:20px;
 .login-box{
 background:white;
 width:350px;
+max-width:90%;
 margin:60px auto;
 padding:30px;
 border-radius:10px;
@@ -39,11 +42,16 @@ border-radius:5px;
 button{
 background:#0056d2;
 color:white;
-padding:12px 20px;
+padding:12px;
+width:95%;
 border:none;
 border-radius:5px;
-width:100%;
 cursor:pointer;
+font-size:16px;
+}
+
+button:hover{
+opacity:0.9;
 }
 
 a{
@@ -56,10 +64,9 @@ background:#0056d2;
 color:white;
 text-align:center;
 padding:15px;
-position:fixed;
-bottom:0;
-width:100%;
+margin-top:50px;
 }
+
 </style>
 
 </head>
@@ -68,22 +75,20 @@ width:100%;
 
 <header>
 <h1>JATAV</h1>
-<p>Finance & Business Services</p>
+<p>Admin Login</p>
 </header>
 
 <div class="login-box">
 
-<h2>Customer Login</h2>
+<h2>Login</h2>
 
-<input type="email" placeholder="Enter Email">
+<input type="email" id="email" placeholder="Enter Email">
 
-<input type="password" placeholder="Enter Password">
+<input type="password" id="password" placeholder="Enter Password">
 
-<button>Login</button>
-
-<br><br>
-
-<a href="register.html">Create New Account</a>
+<button onclick="login()">
+Login
+</button>
 
 <br><br>
 
@@ -94,6 +99,49 @@ width:100%;
 <footer>
 © 2026 JATAV
 </footer>
+
+<script>
+
+const supabaseUrl = "https://dqigwxlroejnmhmhxzdm.supabase.co";
+
+const supabaseKey = "sb_publishable_O72-5olasZIGsRiKHqEmdg_SJfUcY7x";
+
+const supabaseClient = supabase.createClient(
+supabaseUrl,
+supabaseKey
+);
+
+async function login(){
+
+const email = document.getElementById("email").value;
+const password = document.getElementById("password").value;
+
+const { data, error } = await supabaseClient
+.from("admin_users")
+.select("*")
+.eq("email", email)
+.eq("password", password);
+
+if(error){
+alert(error.message);
+return;
+}
+
+if(data.length > 0){
+
+localStorage.setItem("adminLoggedIn","true");
+
+window.location.href = "dashboard.html";
+
+}else{
+
+alert("Invalid Email or Password");
+
+}
+
+}
+
+</script>
 
 </body>
 </html>
