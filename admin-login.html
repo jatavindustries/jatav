@@ -255,6 +255,10 @@ const { data, error } = await supabaseClient
 .eq("password",password)
 .single();
 
+
+  console.log("Data:", data);
+console.log("Error:", error);
+
 if(error || !data){
 
 document.getElementById("error").innerHTML="Invalid Email or Password.";
