@@ -1,10 +1,7 @@
 <!DOCTYPE html>
-
 <html>
 <head>
 <title>Apply Loan - JATAV</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 body{
@@ -37,6 +34,7 @@ padding:12px;
 margin:8px 0;
 border:1px solid #ccc;
 border-radius:5px;
+box-sizing:border-box;
 }
 
 button{
@@ -48,6 +46,11 @@ border:none;
 border-radius:5px;
 cursor:pointer;
 font-size:16px;
+}
+
+button:disabled{
+background:#999;
+cursor:not-allowed;
 }
 
 a{
@@ -86,16 +89,16 @@ margin-top:30px;
 <input type="text" id="city" placeholder="City">
 
 <select id="loan_type">
-<option>Select Loan Type</option>
-<option>Personal Loan</option>
-<option>Business Loan</option>
-<option>Home Loan</option>
-<option>Education Loan</option>
+<option value="">Select Loan Type</option>
+<option value="Personal Loan">Personal Loan</option>
+<option value="Business Loan">Business Loan</option>
+<option value="Home Loan">Home Loan</option>
+<option value="Education Loan">Education Loan</option>
 </select>
 
-<input type="text" id="loan_amount" placeholder="Required Loan Amount">
+<input type="number" id="loan_amount" placeholder="Required Loan Amount">
 
-<button type="button" onclick="submitLoan()">
+<button type="button" id="submitBtn" onclick="submitLoan()">
 Submit Application
 </button>
 
@@ -109,38 +112,161 @@ Submit Application
 © 2026 JATAV
 </footer>
 
-<script>
 
-const supabaseUrl = "https://dqigwxlroejnmhmhxzdm.supabase.co";
+<!-- FIREBASE -->
+<script type="module">
 
-const supabaseKey = "sb_publishable_O72-5olasZIGsRiKHqEmdg_SJfUcY7x";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-const supabaseClient = supabase.createClient(
-supabaseUrl,
-supabaseKey
-);
-
-async function submitLoan(){
-
-const { error } = await supabaseClient
-.from("loan_applications")
-.insert([{
-full_name: document.getElementById("full_name").value,
-mobile: document.getElementById("mobile").value,
-email: document.getElementById("email").value,
-city: document.getElementById("city").value,
-loan_type: document.getElementById("loan_type").value,
-loan_amount: document.getElementById("loan_amount").value
-}]);
-
-if(error){
-alert("Error: " + error.message);
+import {
+getDatabase,
+ref,
+push
 }
-else{
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+
+/* FIREBASE CONFIG */
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyBlvX3jU0-rcBmK803MDxf0xN8f4C0049g",
+
+authDomain: "jatav-7b9f8.firebaseapp.com",
+
+databaseURL: "https://jatav-7b9f8-default-rtdb.firebaseio.com",
+
+projectId: "jatav-7b9f8",
+
+storageBucket: "jatav-7b9f8.firebasestorage.app",
+
+messagingSenderId: "337613651577",
+
+appId: "1:337613651577:web:d8159dc0cf3de766da9ea8",
+
+measurementId: "G-NXEHPZ992X"
+
+};
+
+
+/* INITIALIZE FIREBASE */
+
+const app = initializeApp(firebaseConfig);
+
+const db = getDatabase(app);
+
+
+/* SUBMIT LOAN */
+
+window.submitLoan = async function(){
+
+const fullName =
+document.getElementById("full_name").value.trim();
+
+const mobile =
+document.getElementById("mobile").value.trim();
+
+const email =
+document.getElementById("email").value.trim();
+
+const city =
+document.getElementById("city").value.trim();
+
+const loanType =
+document.getElementById("loan_type").value;
+
+const loanAmount =
+document.getElementById("loan_amount").value.trim();
+
+
+/* BASIC VALIDATION */
+
+if(!fullName || !mobile || !email || !city || !loanType || !loanAmount){
+
+alert("Please fill all the fields.");
+
+return;
+
+}
+
+
+if(mobile.length !== 10){
+
+alert("Please enter a valid 10 digit mobile number.");
+
+return;
+
+}
+
+
+const submitBtn =
+document.getElementById("submitBtn");
+
+submitBtn.disabled = true;
+
+submitBtn.innerText = "Submitting...";
+
+
+try{
+
+const applicationsRef =
+ref(db,"loan_applications");
+
+
+await push(applicationsRef,{
+
+full_name: fullName,
+
+mobile: mobile,
+
+email: email,
+
+city: city,
+
+loan_type: loanType,
+
+loan_amount: loanAmount,
+
+status: "Pending",
+
+created_at: Date.now()
+
+});
+
+
 alert("Application Submitted Successfully!");
-}
+
+
+/* CLEAR FORM */
+
+document.getElementById("full_name").value = "";
+
+document.getElementById("mobile").value = "";
+
+document.getElementById("email").value = "";
+
+document.getElementById("city").value = "";
+
+document.getElementById("loan_type").value = "";
+
+document.getElementById("loan_amount").value = "";
+
+
+}catch(error){
+
+console.error(error);
+
+alert("Application submit nahi hui. Error: " + error.message);
 
 }
+
+
+submitBtn.disabled = false;
+
+submitBtn.innerText = "Submit Application";
+
+};
 
 </script>
 
