@@ -8,8 +8,6 @@
 
 <title>JATAV Admin Login</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
 
 *{
@@ -150,17 +148,22 @@ color:#777;
 
 </head>
 
+
 <body>
 
+
 <div class="login-box">
+
 
 <div class="logo">
 JATAV
 </div>
 
+
 <div class="subtitle">
 Admin & Staff Login
 </div>
+
 
 <div class="input-box">
 
@@ -172,6 +175,7 @@ id="email"
 placeholder="Enter Email">
 
 </div>
+
 
 <div class="input-box">
 
@@ -192,94 +196,154 @@ Show
 
 </div>
 
+
 <button onclick="loginUser()">
-
 Login
-
 </button>
+
 
 <div id="error"></div>
 
+
 <footer>
-
 © 2026 JATAV
-
 </footer>
 
-<script>
 
-const supabaseUrl="https://dqigwxlroejnmhmhxzdm.supabase.co";
+</div>
 
-const supabaseKey="sb_publishable_O72-5olasZIGsRiKHqEmdg_SJfUcY7x";
 
-const supabaseClient = supabase.createClient(
-supabaseUrl,
-supabaseKey
-);
+<!-- FIREBASE AUTH -->
 
-function showPassword(){
+<script type="module">
 
-const p=document.getElementById("password");
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-if(p.type=="password"){
+import {
+getAuth,
+signInWithEmailAndPassword
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-p.type="text";
+
+/* FIREBASE CONFIG */
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyBlvX3jU0-rcBmK803MDxf0xN8f4C0049g",
+
+authDomain: "jatav-7b9f8.firebaseapp.com",
+
+databaseURL: "https://jatav-7b9f8-default-rtdb.firebaseio.com",
+
+projectId: "jatav-7b9f8",
+
+storageBucket: "jatav-7b9f8.firebasestorage.app",
+
+messagingSenderId: "337613651577",
+
+appId: "1:337613651577:web:d8159dc0cf3de766da9ea8",
+
+measurementId: "G-NXEHPZ992X"
+
+};
+
+
+/* INITIALIZE FIREBASE */
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+
+/* SHOW PASSWORD */
+
+window.showPassword = function(){
+
+const p = document.getElementById("password");
+
+if(p.type === "password"){
+
+p.type = "text";
 
 }else{
 
-p.type="password";
+p.type = "password";
 
 }
 
-}
-async function loginUser(){
+};
 
-document.getElementById("error").innerHTML="";
 
-const email=document.getElementById("email").value.trim();
+/* LOGIN */
 
-const password=document.getElementById("password").value.trim();
+window.loginUser = async function(){
 
-if(email=="" || password==""){
+const errorBox =
+document.getElementById("error");
 
-document.getElementById("error").innerHTML="Please fill all fields.";
+errorBox.innerHTML = "";
+
+const email =
+document.getElementById("email").value.trim();
+
+const password =
+document.getElementById("password").value.trim();
+
+
+if(email === "" || password === ""){
+
+errorBox.innerHTML =
+"Please fill all fields.";
 
 return;
 
 }
 
-const { data, error } = await supabaseClient
-.from("admin_users")
-.select("*")
-.eq("email",email)
-.eq("password",password)
-.single();
+
+try{
+
+await signInWithEmailAndPassword(
+auth,
+email,
+password
+);
 
 
-  console.log("Data:", data);
-console.log("Error:", error);
+localStorage.setItem(
+"adminLogin",
+"true"
+);
 
-if(error || !data){
+localStorage.setItem(
+"adminEmail",
+email
+);
 
-document.getElementById("error").innerHTML="Invalid Email or Password.";
+localStorage.setItem(
+"adminRole",
+"admin"
+);
 
-return;
+
+window.location.href =
+"dashboard.html";
+
+
+}catch(error){
+
+console.error(error);
+
+errorBox.innerHTML =
+"Invalid Email or Password.";
 
 }
 
-localStorage.setItem("adminLogin","true");
-
-localStorage.setItem("adminRole",data.role);
-
-localStorage.setItem("adminEmail",data.email);
-
-window.location.href="dashboard.html";
-
-}
+};
 
 </script>
 
-</div>
 
 </body>
 
