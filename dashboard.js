@@ -1,14 +1,51 @@
 //======================
-// SUPABASE CONFIG
+// FIREBASE CONFIG
 //======================
 
-const supabaseUrl = "const supabaseUrl = "https://dqigwxlroejnmhmhxzdm.supabase.co";
-const supabaseKey = "sb_publishable_O72-5olasZIGsRiKHqEmdg_SJfUcY7x";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-const supabaseClient = supabase.createClient(
-    supabaseUrl,
-    supabaseKey
-);
+import {
+    getDatabase,
+    ref,
+    onValue,
+    remove,
+    update
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+
+//======================
+// FIREBASE CONFIG
+//======================
+
+const firebaseConfig = {
+
+    apiKey: "YOUR_FIREBASE_API_KEY",
+
+    authDomain: "jatav-7b9f8.firebaseapp.com",
+
+    databaseURL: "https://jatav-7b9f8-default-rtdb.firebaseio.com",
+
+    projectId: "jatav-7b9f8",
+
+    storageBucket: "jatav-7b9f8.firebasestorage.app",
+
+    messagingSenderId: "337613651577",
+
+    appId: "1:337613651577:web:d8159dc0cf3de766da9ea8",
+
+    measurementId: "G-NXEHPZ992X"
+
+};
+
+
+//======================
+// INITIALIZE FIREBASE
+//======================
+
+const app = initializeApp(firebaseConfig);
+
+const db = getDatabase(app);
+
 
 //======================
 // GLOBAL VARIABLES
@@ -16,41 +53,60 @@ const supabaseClient = supabase.createClient(
 
 let allApplications = [];
 
+
 //======================
 // LOAD DATA
 //======================
 
-async function loadData(){
+function loadData() {
 
-    const { data, error } = await supabaseClient
-    .from("loan_applications")
-    .select("*")
-    .order("id",{ascending:false});
+    const applicationsRef = ref(db, "loan_applications");
 
-    if(error){
+    onValue(applicationsRef, (snapshot) => {
 
-        alert(error.message);
+        const data = snapshot.val();
 
-        return;
+        allApplications = [];
 
-    }
+        if (data) {
 
-    allApplications = data;
+            Object.keys(data).forEach(key => {
 
-    updateCards();
+                allApplications.push({
 
-    showTable(allApplications);
+                    id: key,
+
+                    ...data[key]
+
+                });
+
+            });
+
+        }
+
+        updateCards();
+
+        showTable(allApplications);
+
+    }, (error) => {
+
+        console.error(error);
+
+        alert("Firebase data load error: " + error.message);
+
+    });
 
 }
+
 
 //======================
 // DASHBOARD CARDS
 //======================
 
-function updateCards(){
+function updateCards() {
 
     document.getElementById("totalApps").innerHTML =
-    allApplications.length;
+        allApplications.length;
 
     let pending = 0;
 
@@ -58,21 +114,22 @@ function updateCards(){
 
     let rejected = 0;
 
-    allApplications.forEach(item=>{
 
-        if(item.status=="Approved"){
+    allApplications.forEach(item => {
+
+        if (item.status === "Approved") {
 
             approved++;
 
         }
 
-        else if(item.status=="Rejected"){
+        else if (item.status === "Rejected") {
 
             rejected++;
 
         }
 
-        else{
+        else {
 
             pending++;
 
@@ -80,34 +137,46 @@ function updateCards(){
 
     });
 
+
     document.getElementById("pendingApps").innerHTML =
-    pending;
+        pending;
 
     document.getElementById("approvedApps").innerHTML =
-    approved;
+        approved;
 
     document.getElementById("rejectedApps").innerHTML =
-    rejected;
+        rejected;
 
-}//======================
-// SHOW TABLE
+}
+
+
+//======================
+// STATUS CLASS
 //======================
 
-function getStatusClass(status){
+function getStatusClass(status) {
 
-    if(status=="Approved") return "approved";
+    if (status === "Approved")
+        return "approved";
 
-    if(status=="Rejected") return "rejected";
+    if (status === "Rejected")
+        return "rejected";
 
     return "pending";
 
 }
 
-function showTable(data){
 
-    let html="";
+//======================
+// SHOW TABLE
+//======================
 
-    data.forEach(item=>{
+function showTable(data) {
+
+    let html = "";
+
+
+    data.forEach(item => {
 
         html += `
 
@@ -137,15 +206,17 @@ ${item.status || "Pending"}
 
 <td>
 
-<button class="action-btn view"
-onclick="viewApplication(${item.id})">
+<button
+class="action-btn view"
+onclick="viewApplication('${item.id}')">
 
 View
 
 </button>
 
-<button class="action-btn delete"
-onclick="deleteApplication(${item.id})">
+<button
+class="action-btn delete"
+onclick="deleteApplication('${item.id}')">
 
 Delete
 
@@ -157,45 +228,54 @@ Delete
 
 `;
 
-    }
-                );
+    });
+
 
     document.getElementById("tableData").innerHTML = html;
 
 }
 
-loadData();
+
 //======================
 // LIVE SEARCH
 //======================
 
 document
 .getElementById("searchBox")
-.addEventListener("keyup",function(){
+.addEventListener("keyup", function () {
 
-const value=this.value.toLowerCase();
+    const value = this.value.toLowerCase();
 
-const filterData=allApplications.filter(item=>{
 
-return(
+    const filterData = allApplications.filter(item => {
 
-(item.full_name||"").toLowerCase().includes(value)
+        return (
 
-||
+            (item.full_name || "")
+                .toLowerCase()
+                .includes(value)
 
-(item.mobile||"").toLowerCase().includes(value)
+            ||
 
-||
+            (item.mobile || "")
+                .toLowerCase()
+                .includes(value)
 
-(item.email||"").toLowerCase().includes(value)
+            ||
 
-);
+            (item.email || "")
+                .toLowerCase()
+                .includes(value)
+
+        );
+
+    });
+
+
+    showTable(filterData);
 
 });
 
-showTable(filterData);
-
-});
 
 //======================
 // REFRESH BUTTON
@@ -203,125 +283,162 @@ showTable(filterData);
 
 document
 .getElementById("refreshBtn")
-.addEventListener("click",loadData);
+.addEventListener("click", function () {
+
+    loadData();
+
+});
+
 
 //======================
 // VIEW APPLICATION
 //======================
 
-function viewApplication(id){
+window.viewApplication = function (id) {
 
-const app=allApplications.find(x=>x.id==id);
+    const app = allApplications.find(
+        x => x.id === id
+    );
 
-if(!app){
 
-return;
+    if (!app) {
 
-}
+        return;
 
-alert(
+    }
 
-"Name : "+app.full_name+
 
-"\n\nMobile : "+app.mobile+
+    alert(
 
-"\n\nEmail : "+app.email+
+        "Name : " + (app.full_name || "") +
 
-"\n\nCity : "+app.city+
+        "\n\nMobile : " + (app.mobile || "") +
 
-"\n\nLoan : "+app.loan_type+
+        "\n\nEmail : " + (app.email || "") +
 
-"\n\nAmount : ₹"+app.loan_amount+
+        "\n\nCity : " + (app.city || "") +
 
-"\n\nStatus : "+(app.status||"Pending")
+        "\n\nLoan : " + (app.loan_type || "") +
 
-);
+        "\n\nAmount : ₹" + (app.loan_amount || "") +
 
-}
+        "\n\nStatus : " + (app.status || "Pending")
+
+    );
+
+};
+
+
 //======================
 // DELETE APPLICATION
 //======================
 
-async function deleteApplication(id){
+window.deleteApplication = async function (id) {
 
-const ok = confirm("Delete this application?");
+    const ok = confirm(
+        "Delete this application?"
+    );
 
-if(!ok){
 
-return;
+    if (!ok) {
 
-}
+        return;
 
-const { error } = await supabaseClient
-.from("loan_applications")
-.delete()
-.eq("id",id);
+    }
 
-if(error){
 
-alert(error.message);
+    try {
 
-return;
+        const applicationRef =
+            ref(db, "loan_applications/" + id);
 
-}
 
-loadData();
+        await remove(applicationRef);
 
-}
+
+        alert(
+            "Application deleted successfully."
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Delete error: " + error.message
+        );
+
+    }
+
+};
+
 
 //======================
 // CHANGE STATUS
 //======================
 
-async function updateStatus(id,status){
+window.updateStatus = async function (id, status) {
 
-const { error } = await supabaseClient
-.from("loan_applications")
-.update({
+    try {
 
-status:status
+        const applicationRef =
+            ref(db, "loan_applications/" + id);
 
-})
-.eq("id",id);
 
-if(error){
+        await update(applicationRef, {
 
-alert(error.message);
+            status: status
 
-return;
+        });
 
-}
 
-loadData();
+    }
 
-}
+    catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Status update error: " +
+            error.message
+        );
+
+    }
+
+};
+
 
 //======================
 // STATUS DROPDOWN
 //======================
 
-function statusDropdown(id,currentStatus){
+window.statusDropdown = function (
+    id,
+    currentStatus
+) {
 
-return `
+    return `
 
 <select
-onchange="updateStatus(${id},this.value)">
+onchange="updateStatus('${id}',this.value)">
 
 <option
 value="Pending"
-${currentStatus=="Pending"?"selected":""}>
+${currentStatus === "Pending" ? "selected" : ""}>
 Pending
 </option>
 
 <option
 value="Approved"
-${currentStatus=="Approved"?"selected":""}>
+${currentStatus === "Approved" ? "selected" : ""}>
 Approved
 </option>
 
 <option
 value="Rejected"
-${currentStatus=="Rejected"?"selected":""}>
+${currentStatus === "Rejected" ? "selected" : ""}>
 Rejected
 </option>
 
@@ -329,39 +446,47 @@ Rejected
 
 `;
 
-}
+};
+
+
 //======================
 // LOGOUT
 //======================
 
 document
 .getElementById("logoutBtn")
-.addEventListener("click",logout);
+.addEventListener("click", logout);
 
-function logout(){
 
-const ok = confirm("Are you sure you want to logout?");
+function logout() {
 
-if(!ok){
+    const ok = confirm(
+        "Are you sure you want to logout?"
+    );
 
-return;
+
+    if (!ok) {
+
+        return;
+
+    }
+
+
+    localStorage.removeItem("adminLogin");
+
+    localStorage.removeItem("adminEmail");
+
+    localStorage.removeItem("adminRole");
+
+
+    window.location.href =
+        "admin-login.html";
 
 }
 
-localStorage.removeItem("adminLogin");
-localStorage.removeItem("adminEmail");
-localStorage.removeItem("adminRole");
-
-window.location.href="admin-login.html";
-
-}
 
 //======================
-// PAGE LOAD
+// START
 //======================
-
-window.onload=function(){
 
 loadData();
-
-};
