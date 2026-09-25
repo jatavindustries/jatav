@@ -11,8 +11,6 @@
 
 <link rel="stylesheet" href="style.css">
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 </head>
 
 <body>
@@ -22,14 +20,16 @@
 <h1>JATAV Admin Dashboard</h1>
 
 <button id="logoutBtn">
-
 Logout
-
 </button>
 
 </header>
 
+
 <div class="container">
+
+
+<!-- DASHBOARD CARDS -->
 
 <div class="cards">
 
@@ -38,50 +38,48 @@ Logout
 <h3>Total Applications</h3>
 
 <div class="number" id="totalApps">
-
 0
-
 </div>
 
 </div>
+
 
 <div class="card">
 
 <h3>Pending</h3>
 
 <div class="number" id="pendingApps">
-
 0
-
 </div>
 
 </div>
+
 
 <div class="card">
 
 <h3>Approved</h3>
 
 <div class="number" id="approvedApps">
-
 0
-
 </div>
 
 </div>
+
 
 <div class="card">
 
 <h3>Rejected</h3>
 
 <div class="number" id="rejectedApps">
-
 0
-
 </div>
 
 </div>
 
 </div>
+
+
+<!-- SEARCH -->
 
 <div class="toolbar">
 
@@ -91,12 +89,13 @@ id="searchBox"
 placeholder="Search by Name, Mobile, Email">
 
 <button id="refreshBtn">
-
 Refresh
-
 </button>
 
 </div>
+
+
+<!-- TABLE -->
 
 <div class="table-box">
 
@@ -125,6 +124,21 @@ Refresh
 </tr>
 
 </thead>
+
+
+<tbody id="tableData">
+
+</tbody>
+
+
+</table>
+
+</div>
+
+
+</div>
+
+
 <!-- VIEW APPLICATION MODAL -->
 
 <div id="viewModal" class="modal">
@@ -140,55 +154,13 @@ Refresh
 </div>
 
 </div>
-<tbody id="tableData">
 
-</tbody>
 
-</table>
+<!-- FIREBASE DASHBOARD JS -->
 
-</div>
+<script type="module" src="dashboard.js"></script>
 
-</div>
-
-<script src="dashboard.js"></script>
 
 </body>
 
 </html>
-.modal{
-
-display:none;
-position:fixed;
-left:0;
-top:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,.5);
-
-}
-
-.modal-content{
-
-background:white;
-width:500px;
-max-width:95%;
-margin:60px auto;
-padding:25px;
-border-radius:10px;
-
-}
-
-#closeModal{
-
-float:right;
-font-size:28px;
-cursor:pointer;
-font-weight:bold;
-
-}
-
-#modalBody p{
-
-margin:12px 0;
-
-}
